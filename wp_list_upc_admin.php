@@ -1,12 +1,16 @@
 <?php
 
+if (!class_exists('WP_List_Table')) {
+      require_once(ABSPATH . 'wp-admin/includes/class-wp-list-table.php');
+}
+
 class UPC_admin_table extends WP_List_Table
 {
     private $table_data;
 
     function get_columns()
     {
-        $columns = [
+        return [
             'name' => 'Nom',
             'enabled' => 'Activé',
             'delete' => 'Supprimer',
@@ -27,12 +31,13 @@ class UPC_admin_table extends WP_List_Table
     function column_default($item, $column_name)
     {
         switch ($column_name) {
-            case 'id':
             case 'name':
                 return $item[$column_name];
             case 'enabled':
                 $checked = !empty($item[$column_name]) ? 'checked="checked"' : '';
                 return "<input type='checkbox' value='1' {$checked} />";
+            case 'delete':
+                return "<button>Supprimer</button>";
         }
     }
 
@@ -48,6 +53,7 @@ class UPC_admin_table extends WP_List_Table
             INNER JOIN {$wpdb->prefix}terms t t.term_id ON = tt.term_id
             LEFT JOIN {$table} upc ON upc.thing_id = t.term_id
             WHERE tt.taxonomy = 'category'
-        ");
+            AND upc.deleted <> 1
+        ", ARRAY_A);
     }
 }

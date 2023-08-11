@@ -1,11 +1,3 @@
-<style>
-    .nav-tab {
-        border-top-left-radius: 5px;
-        border-top-right-radius: 5px;
-        transition: background-color .15s ease;
-    }
-</style>
-
 <div class="wrap">
     <h1>
         <?php echo esc_html(get_admin_page_title()) ?>
@@ -13,7 +5,7 @@
 
     <nav class="nav-tab-wrapper">
         <a
-            href="?page=permissions_plugin&tab=categories"
+            href="?page=permissions_plugin"
             class="nav-tab<?php if (empty($tab)): ?> nav-tab-active<?php endif ?>"
         >
             Catégories
@@ -38,17 +30,17 @@
         </a>
     </nav>
 
+    <div id="permission-control-admin" class="wrap">
+        <div>
+            <a href="#" class="page-title-action show-add-permissions-form">Ajouter</a>
+        </div>
 
-    <?php
-        switch ($tab) {
-            case 'categories':
-            case 'labels':
-            case 'posts':
-            case 'users':
-                require $tab;
-                break;
+        <?php $table->display() ?>
 
-            default:
-                return;
-        } ?>
+        <div>
+            <a href="#" class="page-title-action show-add-permissions-form">Ajouter</a>
+        </div>
+
+        <?php require 'add_form.php' ?>
+    </div>
 </div>
