@@ -1,35 +1,72 @@
-#permission-control-admin {
-    margin-top: 30px
+#permission_control_admin {
+    margin-top: 30px;
 }
 
-#permission-control-admin .nav-tab {
+#permission_control_admin .nav-tab {
     border-top-left-radius: 5px;
     border-top-right-radius: 5px;
     transition: background-color .15s ease;
 }
 
-#permission-control-admin .show-add-permissions-form {
+#permission_control_admin .show_add_permission_form {
     border-radius: 5px;
 }
 
-#permission-control-admin,
-#permission-control-admin .wp-list-table th {
+#permission_control_admin,
+#permission_control_admin .wp-list-table th {
     color: #454b52;
 }
 
-#permission-control-admin .wp-list-table th {
+#permission_control_admin .wp-list-table th {
     font-weight: bold;
 }
 
-#permission-control-admin .wp-list-table tr.no-items {
+#permission_control_admin .wp-list-table tr.no-items {
     font-style: italic;
 }
 
-#permission-control-admin #permissions-add-form {
+#permission_control_admin #add_permission_form {
     display: none;
     margin-top: 20px;
+    width: 50%;
     border: 1px #959eaa solid;
     border-radius: 10px;
     padding: 10px;
     background-color: #ffffff;
+}
+
+#permission_control_admin label {
+    display: block;
+    margin-bottom: 10px;
+    font-weight: bold;
+}
+
+#permission_control_admin .form-group {
+    margin-bottom: 20px;
+}
+
+#permission_control_admin #type_select {
+    width: 250px;
+}
+
+
+#permission_control_admin #add_permission_form #cancel_add_permission,
+#permission_control_admin #add_permission_form input[type="submit"] {
+    border-radius: 5px;
+    background-color: transparent;
+    cursor: pointer;
+    border-width: 2p;
+    border-style: solid;
+}
+
+#permission_control_admin #add_permission_form #cancel_add_permission {
+    border-color: brown;
+    padding: 4px 8px;
+    color: brown;
+}
+
+#permission_control_admin #add_permission_form input[type="submit"] {
+    border-color: seagreen;
+    padding: 3px 8px;
+    color: seagreen;
 }

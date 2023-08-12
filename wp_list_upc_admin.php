@@ -11,7 +11,8 @@ class UPC_admin_table extends WP_List_Table
     function get_columns()
     {
         return [
-            'name' => 'Nom',
+            'name' => 'Nom/rôle',
+            'type' => 'Type',
             'enabled' => 'Activé',
             'delete' => 'Supprimer',
         ];
@@ -30,9 +31,17 @@ class UPC_admin_table extends WP_List_Table
 
     function column_default($item, $column_name)
     {
+        $types = [
+            'category' => 'Catégorie',
+            'label' => 'Étiquette',
+            'post' => 'Post',
+        ];
+
         switch ($column_name) {
             case 'name':
                 return $item[$column_name];
+            case 'type':
+                return $types[$item[$column_name]];
             case 'enabled':
                 $checked = !empty($item[$column_name]) ? 'checked="checked"' : '';
                 return "<input type='checkbox' value='1' {$checked} />";
@@ -44,14 +53,14 @@ class UPC_admin_table extends WP_List_Table
     private function get_table_data()
     {
         global $wpdb;
-        $table = $wpdb->prefix . 'permission_control';
 
         return $wpdb->get_results("
-            SELECT t.name, tt.parent, upc.enabled
+            SELECT t.name, tt.parent,  wpc.type, wpc.enabled
             FROM {$wpdb->prefix}term_taxonomy tt
             INNER JOIN {$wpdb->prefix}terms_taxonomy tts ON tts.term_id = t.term_id
             INNER JOIN {$wpdb->prefix}terms t t.term_id ON = tt.term_id
-            LEFT JOIN {$table} upc ON upc.thing_id = t.term_id
+            LEFT JOIN {$wpdb->prefix}permission_control wpc ON wpc.thing_id = t.term_id
+            LEFT JOIN {$wpdb->prefix}usermeta um ON um.umeta_id = wpc.thing_id
             WHERE tt.taxonomy = 'category'
             AND upc.deleted <> 1
         ", ARRAY_A);

@@ -6,7 +6,7 @@
 require __DIR__ . '/wp_list_upc_admin.php';
 
 // Actions à l'activation du plugin
-function upc_activation_hook()
+function wpc_activation_hook()
 {
     global $wpdb;
     $charset_collate = $wpdb->get_charset_collate();
@@ -25,10 +25,10 @@ function upc_activation_hook()
     return empty($wpdb->last_error);
 }
 
-register_activation_hook( __FILE__, 'upc_activation_hook');
+register_activation_hook( __FILE__, 'wpc_activation_hook');
 
 // Ajoute le menu des permissions dans Comptes
-function upc_permission_menu()
+function wpc_permission_menu()
 {
     add_users_page(
         'Permissions',
@@ -39,35 +39,16 @@ function upc_permission_menu()
     );
 }
 
-add_action('admin_menu', 'upc_permission_menu');
-
-// Affiche la page d'admin des permissions
-function upc_users_content()
-{
-    if (!current_user_can('edit_users')) {
-        return;
-    }
-
-    $tab = isset($_GET['tab']) ? $_GET['tab'] : '';
-    $table = new UPC_admin_table();
-    $table->prepare_items();
-
-    include('includes/main.php');
-}
-
-// Submit formulaire d'ajout
-add_action('admin_action_upc_add_action', 'upc_add_action');
-
-function upc_add_action()
-{
-    // Do your stuff here
-    wp_redirect( $_SERVER['HTTP_REFERER'] );
-    exit();
-}
+add_action('admin_menu', 'wpc_permission_menu');
 
 // Ajout Javascript
 function add_js($hook) {
-    wp_enqueue_script('add_js', plugin_dir_url(__FILE__) . 'includes/wp-permission-control.js');
+    wp_register_script(
+        'wpc_js', plugin_dir_url(__FILE__) . '/includes/wp-permission-control.js',
+        ['jquery']
+    );
+    wp_localize_script('wpc_js', 'wpcAjax', ['ajaxurl' => admin_url('admin-ajax.php')]);
+    wp_enqueue_script('wpc_js');
 }
 
 add_action('admin_enqueue_scripts', 'add_js');
@@ -78,3 +59,35 @@ function admin_css() {
 }
 
 add_action('admin_enqueue_scripts', 'admin_css');
+
+// Affiche la page d'admin des permissions
+function upc_users_content()
+{
+    if (!current_user_can('edit_users')) {
+        return;
+    }
+
+    $table = new UPC_admin_table();
+    $table->prepare_items();
+
+    include('includes/main.php');
+}
+
+// Submit formulaire d'ajout
+add_action('admin_action_wpc_add_action', 'wpc_add_action');
+add_action('wp_ajax_nopriv_get_my_post', 'wpc_add_action');
+
+function wpc_add_action()
+{
+    // Do your stuff here
+    wp_redirect($_SERVER['HTTP_REFERER']);
+    exit();
+}
+
+// AJAX search
+add_action('wp_ajax_wpc_search', 'wpc_search');
+
+function wpc_search()
+{
+    echo '<pre>'; print_r($_POST); die;
+}
