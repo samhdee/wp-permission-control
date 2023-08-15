@@ -33,7 +33,7 @@ class UPC_admin_table extends WP_List_Table
     {
         $types = [
             'category' => 'Catégorie',
-            'label' => 'Étiquette',
+            'post_tag' => 'Étiquette',
             'post' => 'Post',
         ];
 
@@ -41,7 +41,7 @@ class UPC_admin_table extends WP_List_Table
             case 'name':
                 return $item[$column_name];
             case 'type':
-                return $types[$item[$column_name]];
+                return TYPES_LIST[$item[$column_name]];
             case 'enabled':
                 $checked = !empty($item[$column_name]) ? 'checked="checked"' : '';
                 return "<input type='checkbox' value='1' {$checked} />";

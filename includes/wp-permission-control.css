@@ -31,24 +31,89 @@
     width: 50%;
     border: 1px #959eaa solid;
     border-radius: 10px;
-    padding: 10px;
+    padding: 15px 10px;
     background-color: #ffffff;
 }
 
-#permission_control_admin label {
-    display: block;
-    margin-bottom: 10px;
-    font-weight: bold;
+#permission_control_admin .form-group {
+    display: flex;
+    align-items: center;
+    gap: 10px;
 }
 
-#permission_control_admin .form-group {
+#permission_control_admin .form-group:not(:last-child) {
     margin-bottom: 20px;
 }
 
-#permission_control_admin #type_select {
+#permission_control_admin .form-element {
+    position: relative;
+}
+
+#permission_control_admin .form-element .spinner {
+    width: 48px;
+    height: 48px;
+    border: 5px solid #454b52;
+    border-bottom-color: #4d9ffd;
+    border-radius: 50%;
+    display: inline-block;
+    box-sizing: border-box;
+    animation: rotation 1s linear infinite;
+}
+
+#permission_control_admin select {
     width: 250px;
 }
 
+#permission_control_admin select option:first-child {
+    color: #788088;
+}
+
+#permission_control_admin .form-element .wpc_search_results {
+    display: none;
+    position: absolute;
+    top: 78px;
+    width: 98.8%;
+    left: 1px;
+    max-height: 100px;
+    border: 1px solid #959eaa;
+    border-bottom-left-radius: 5px;
+    border-bottom-right-radius: 5px;
+    box-shadow: 0px 3px 5px 0 rgba(0,0,0,0.56);
+    overflow-y: auto;
+    background-color: #f0f0f1;
+    z-index: 10;
+}
+
+#permission_control_admin .form-element .wpc_search_results ul {
+    overflow: hidden;
+    margin: 0;
+}
+
+#permission_control_admin .form-element .wpc_search_results ul .wpc_search_item {
+    margin-bottom: 0;
+}
+
+#permission_control_admin .form-element .wpc_search_results .wpc_no_results {
+    padding: 10px;
+    font-style: italic;
+}
+
+#permission_control_admin .form-element .wpc_search_results .wpc_search_item a {
+    display: block;
+    padding: 10px;
+    text-decoration: none;
+    color: #454b52;
+    transition: background-color 0.2s ease;
+}
+
+#permission_control_admin .form-element .wpc_search_results .wpc_search_item a:hover {
+    background-color: #d6d6d6;
+}
+
+#permission_control_admin .form-element .wpc_search_results .wpc_search_item a:focus,
+#permission_control_admin .form-element .wpc_search_results .wpc_search_item a:active {
+    outline: none;
+}
 
 #permission_control_admin #add_permission_form #cancel_add_permission,
 #permission_control_admin #add_permission_form input[type="submit"] {

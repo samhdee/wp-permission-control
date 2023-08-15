@@ -3,38 +3,52 @@
         <input type="hidden" name="action" value="upc_add" />
 
         <div class="form-group">
-            <label for="type_select">Type</label>
+            <div class="form-element">
+                <select id="population_type_select">
+                    <option value="">Type de population</option>
+                    <option value="user">Utilisateur</option>
+                    <option value="role">Rôle</option>
+                </select>
+            </div>
 
-            <select id="type_select">
-                <option value=""></option>
-                <option value="category">Catégorie</option>
-                <option value="label">Étiquette</option>
-                <option value="post">Post</option>
-            </select>
+            <div class="form-element">
+                <input
+                    id="population_search"
+                    class="thing_search"
+                    type="text"
+                    placeholder="Nom/rôle"
+                    name="population_id"
+                    size="40"
+                    autocomplete="off"
+                    data-taxo="population_type_select"
+                    disabled />
+                <div id="wpc_content_search" class="wpc_search_results"></div>
+            </div>
         </div>
 
         <div class="form-group">
-            <input
-                id="user_search"
-                class="thing_search"
-                type="text"
-                placeholder="Nom/rôle"
-                name="user"
-                size="40"
-                autocomplete="off"
-                disabled />
-        </div>
+            <div class="form-element">
+                <select id="content_type_select">
+                    <option value="">Type de contenu</option>
+                    <option value="category">Catégorie</option>
+                    <option value="post_tag">Étiquette</option>
+                    <option value="post">Post</option>
+                </select>
+            </div>
 
-        <div class="form-group">
-            <input
-                id="target_search"
-                class="thing_search"
-                type="text"
-                placeholder="Cible"
-                name="target"
-                size="40"
-                autocomplete="off"
-                disabled />
+            <div class="form-element">
+                <input
+                    id="content_search"
+                    class="thing_search"
+                    type="text"
+                    placeholder="Cible"
+                    name="content_id"
+                    size="40"
+                    autocomplete="off"
+                    data-taxo="content_type_select"
+                    disabled />
+                    <div id="wpc_content_search" class="wpc_search_results"></div>
+            </div>
         </div>
 
         <div class="form-group">
@@ -42,4 +56,5 @@
             <input type="submit" value="Do it!" name="submit" disabled />
         </div>
     </form>
+
 </div>

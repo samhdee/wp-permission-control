@@ -2,6 +2,11 @@
 /**
  *  Plugin name: Permission control
  */
+const TYPES_LIST = [
+    'category' => 'Catégorie',
+    'post_tag' => 'Étiquette',
+    'post' => 'Post',
+];
 
 require __DIR__ . '/wp_list_upc_admin.php';
 
@@ -89,5 +94,53 @@ add_action('wp_ajax_wpc_search', 'wpc_search');
 
 function wpc_search()
 {
-    echo '<pre>'; print_r($_POST); die;
+    if (
+        empty($_POST)
+        || empty($_POST['target'])
+        || !in_array($_POST['target'], ['user', 'role', 'post', 'post_tag', 'category'])
+        || empty($_POST['value'])
+    ) {
+        die('bah ?');
+        echo json_encode(['success' => false]);
+        die;
+    }
+
+    global $wpdb;
+
+    switch ($_POST['target']) {
+        case 'user':
+            $query = new WP_User_Query([
+                'search' => $_POST['value'],
+                'search_columns' => ['user_nicename'],
+                'orderby' => 'user_nicename'
+            ]);
+            echo json_encode($query->get_results());
+            die;
+
+        case 'role':
+            break;
+
+        case 'post':
+            echo json_encode($wpdb->get_results("
+                SELECT ID, post_title
+                FROM {$wpdb->prefix}posts
+                WHERE post_title LIKE '%{$_POST['value']}%'
+                ORDER BY post_title
+            "));
+            die;
+            break;
+
+        case 'post_tag':
+        case 'category':
+            echo json_encode($wpdb->get_results("
+                SELECT t.term_id, t.name
+                FROM {$wpdb->prefix}terms t
+                INNER JOIN {$wpdb->prefix}term_taxonomy tt ON tt.term_id = t.term_id
+                WHERE tt.taxonomy = '{$_POST['target']}'
+                AND t.name LIKE '%{$_POST['value']}%'
+                ORDER BY t.name
+            "));
+            die;
+            break;
+    }
 }
