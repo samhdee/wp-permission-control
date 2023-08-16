@@ -23,6 +23,7 @@
                     data-taxo="population_type_select"
                     disabled />
 
+                <i class="far fa-circle-xmark empty_search"></i>
                 <div id="wpc_population_search" class="wpc_search_results"></div>
 
                 <select id="role_select">
@@ -56,7 +57,9 @@
                     autocomplete="off"
                     data-taxo="content_type_select"
                     disabled />
-                    <div id="wpc_content_search" class="wpc_search_results"></div>
+
+                <i class="far fa-circle-xmark empty_search"></i>
+                <div id="wpc_content_search" class="wpc_search_results"></div>
             </div>
         </div>
 

@@ -140,7 +140,7 @@ function wpc_search()
         case 'post_tag':
         case 'category':
             echo json_encode($wpdb->get_results("
-                SELECT t.term_id, t.name
+                SELECT t.term_id as id, t.name
                 FROM {$wpdb->prefix}terms t
                 INNER JOIN {$wpdb->prefix}term_taxonomy tt ON tt.term_id = t.term_id
                 WHERE tt.taxonomy = '{$_POST['target']}'

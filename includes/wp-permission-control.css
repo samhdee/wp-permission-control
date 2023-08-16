@@ -1,3 +1,5 @@
+@import 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css';
+
 #permission_control_admin {
     margin-top: 30px;
 }
@@ -66,6 +68,15 @@
 
 #permission_control_admin select option:first-child {
     color: #788088;
+}
+
+#permission_control_admin .form-element .empty_search {
+    display: none;
+    position: absolute;
+    top: 9px;
+    right: 5px;
+    cursor: pointer;
+    color: #585e66;
 }
 
 #permission_control_admin .form-element .wpc_search_results {
