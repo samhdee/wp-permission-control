@@ -71,8 +71,8 @@
 #permission_control_admin .form-element .wpc_search_results {
     display: none;
     position: absolute;
-    top: 78px;
-    width: 98.8%;
+    top: 28px;
+    width: 98.7%;
     left: 1px;
     max-height: 100px;
     border: 1px solid #959eaa;
@@ -113,6 +113,10 @@
 #permission_control_admin .form-element .wpc_search_results .wpc_search_item a:focus,
 #permission_control_admin .form-element .wpc_search_results .wpc_search_item a:active {
     outline: none;
+}
+
+#permission_control_admin .form-element #role_select {
+    display: none;
 }
 
 #permission_control_admin #add_permission_form #cancel_add_permission,
