@@ -150,3 +150,8 @@
     padding: 3px 8px;
     color: seagreen;
 }
+
+#permission_control_admin #add_permission_form input[type="submit"]:disabled {
+    border-color: #d6d6d6;
+    color: #d6d6d6;
+}

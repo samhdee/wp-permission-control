@@ -21,14 +21,16 @@ function wpc_activation_hook()
     global $wpdb;
     $charset_collate = $wpdb->get_charset_collate();
     $table_name = $wpdb->prefix . 'permission_control';
-    $query = "CREATE TABLE IF NOT EXISTS {$table_name} (
-            `id` int(9) NOT NULL AUTO_INCREMENT,
-            `permissions` text NOT NULL,
-            `type` text NOT NULL,
-            `enabled` tinyint(1),
-            `deleted` TINYINT(1) NOT NULL DEFAULT '0',
-            PRIMARY KEY (id)
-        ) {$charset_collate}";
+    $query = "CREATE TABLE `wp_permission_control` (
+        `id` int NOT NULL,
+        `population_id` int NOT NULL,
+        `content_id` int NOT NULL,
+        `content_type` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci NOT NULL,
+        `population_type` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci NOT NULL,
+        `enabled` tinyint(1) DEFAULT NULL,
+        `deleted` tinyint(1) NOT NULL DEFAULT '0'
+        ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_520_ci;
+    ";
 
     require_once ABSPATH . 'wp-admin/includes/upgrade.php';
     dbDelta($query);
@@ -52,6 +54,8 @@ function wpc_permission_menu()
 add_action('admin_menu', 'wpc_permission_menu');
 
 // Ajout Javascript
+add_action('admin_enqueue_scripts', 'add_js');
+
 function add_js($hook) {
     wp_register_script(
         'wpc_js', plugin_dir_url(__FILE__) . '/includes/wp-permission-control.js',
@@ -61,14 +65,12 @@ function add_js($hook) {
     wp_enqueue_script('wpc_js');
 }
 
-add_action('admin_enqueue_scripts', 'add_js');
-
 // Ajout CSS
+add_action('admin_enqueue_scripts', 'admin_css');
+
 function admin_css() {
 	wp_enqueue_style('admin-styles', plugin_dir_url(__FILE__) . 'includes/wp-permission-control.css');
 }
-
-add_action('admin_enqueue_scripts', 'admin_css');
 
 // Affiche la page d'admin des permissions
 function upc_users_content()
@@ -157,6 +159,66 @@ add_action('admin_action_wpc_add', 'wpc_add');
 
 function wpc_add()
 {
+    if (empty($_POST['population_type'] || !in_array($_POST['population_type'], ['user', 'role']))) {
+        echo json_encode(['success' => false, 'field' => 'population_type']);
+        die;
+    }
+
+    if (empty($_POST['content_type'] || !in_array($_POST['content_type'], ['user', 'role']))) {
+        echo json_encode(['success' => false, 'field' => 'content_type']);
+        die;
+    }
+
     global $wpdb;
-    echo '<pre>'; print_r($_POST); die;
+    check_thing_exists($_POST['population_type'], $_POST['population_id']);
+}
+
+// Check l'existence de la population et du contenu
+/**
+ * @param $type
+ * @param $id
+ * @return bool
+ */
+function check_thing_exists($type, $id)
+{
+    global $wpdb;
+
+    switch ($type) {
+        case 'user':
+            $query = $wpdb::prepare("
+                SELECT ID
+                FROM {$wpdb->prefix}users
+                WHERE ID = %d
+                ORDER BY user_nicename
+            ", [$id]);
+            $result = $wpdb->get_results($query);
+            echo '<pre>'; var_dump($result); die;
+            break;
+
+        case 'post':
+        case 'page':
+            echo json_encode($wpdb->get_results("
+                SELECT ID as id, post_title as name
+                FROM {$wpdb->prefix}posts
+                WHERE post_title LIKE '{$_POST['value']}%'
+                AND post_type = '{$_POST['target']}'
+                AND post_status <> 'trash'
+                ORDER BY post_title
+            "));
+            die;
+            break;
+
+        case 'post_tag':
+        case 'category':
+            echo json_encode($wpdb->get_results("
+                SELECT t.term_id as id, t.name
+                FROM {$wpdb->prefix}terms t
+                INNER JOIN {$wpdb->prefix}term_taxonomy tt ON tt.term_id = t.term_id
+                WHERE tt.taxonomy = '{$_POST['target']}'
+                AND t.name LIKE '{$_POST['value']}%'
+                ORDER BY t.name
+            "));
+            die;
+            break;
+    }
 }

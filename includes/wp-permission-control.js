@@ -94,6 +94,7 @@ jQuery(document).ready(function ($) {
         );
     });
 
+    // Vide l'input de recherche associé
     $('#add_permission_form .empty_search').on('click', function () {
         const empty_search = $(this);
         $(empty_search).siblings('input').val('');
@@ -104,15 +105,25 @@ jQuery(document).ready(function ($) {
     $('.wpc_search_results').on('click', 'a', function (e) {
         e.preventDefault();
         const item = $(this);
+        const search_input = $(item).parents('.form-element').find('input.thing_search');
+        const hidden_input = $(search_input).data('input');
 
-        $(item)
-            .parents('.form-element')
-            .find('input')
-            .val($(item).text());
+        $(search_input).val($(item).text());
+        $(`#add_permission_form input[type="hidden"][name="${hidden_input}"]`).val($(item).data('result_id'));
         $(item)
             .parents('.wpc_search_results')
             .empty()
             .hide();
+    });
+
+
+    // Active/désactive le bouton submit
+    $('#add_permission_form #population_search, #add_permission_form #content_search').on('change', function () {
+        $( '#add_permission_form input[type="submit"]').prop(
+            'disabled',
+                $('#add_permission_form #population_search').val().length == 0
+                && $('#add_permission_form #content_search').val().length == 0
+        );
     });
 
     // Cache les résultats au clic en dehors

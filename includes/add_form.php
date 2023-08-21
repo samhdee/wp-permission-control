@@ -4,7 +4,7 @@
 
         <div class="form-group">
             <div class="form-element">
-                <select id="population_type_select">
+                <select id="population_type_select" name="population_type">
                     <option value="">Type de population</option>
                     <option value="user">Utilisateur</option>
                     <option value="role">Rôle</option>
@@ -17,14 +17,15 @@
                     class="thing_search"
                     type="text"
                     placeholder="Nom"
-                    name="population_id"
                     size="32"
                     autocomplete="off"
                     data-taxo="population_type_select"
+                    data-input="population_id"
                     disabled />
 
                 <i class="far fa-circle-xmark empty_search"></i>
                 <div id="wpc_population_search" class="wpc_search_results"></div>
+                <input type="hidden" name="population_id" />
 
                 <select id="role_select">
                     <option value="">Nom</option>
@@ -37,7 +38,7 @@
 
         <div class="form-group">
             <div class="form-element">
-                <select id="content_type_select">
+                <select id="content_type_select" name="content_type">
                     <option value="">Type de contenu</option>
                     <option value="category">Catégorie</option>
                     <option value="post_tag">Étiquette</option>
@@ -52,11 +53,12 @@
                     class="thing_search"
                     type="text"
                     placeholder="Cible"
-                    name="content_id"
                     size="32"
                     autocomplete="off"
                     data-taxo="content_type_select"
+                    data-input="content_id"
                     disabled />
+                <input type="hidden" name="content_id" />
 
                 <i class="far fa-circle-xmark empty_search"></i>
                 <div id="wpc_content_search" class="wpc_search_results"></div>
